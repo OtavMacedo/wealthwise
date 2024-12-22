@@ -1,0 +1,46 @@
+[tool.poetry]
+name = "wealthwise"
+version = "0.1.0"
+description = ""
+authors = ["otavmacedo <otavmacedo04@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.12.*"
+fastapi = {extras = ["standard"], version = "^0.115.6"}
+sqlalchemy = "^2.0.36"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.4"
+ruff = "^0.8.4"
+taskipy = "^1.14.1"
+pytest-cov = "^6.0.0"
+
+[tool.ruff]
+line-length = 119
+
+[tool.ruff.lint]
+preview = true
+select = ['I', 'F', 'E', 'W', 'PL', 'PT' ]
+
+[tool.ruff.format]
+preview = true
+quote-style = 'single'
+
+[tool.pytest.ini_options]
+pythonpath = "."
+addopts = '-p no:warnings'
+
+[tool.taskipy.tasks]
+run = 'fastapi dev src/app.py'
+
+pre_test = 'task lint'
+test = 'pytest --cov=src -vv'
+post_test = 'coverage html'
+
+lint = 'ruff check . & ruff check . --diff'
+format = 'ruff check . --fix & ruff format .'
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
